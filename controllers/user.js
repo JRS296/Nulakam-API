@@ -49,7 +49,8 @@ exports.getCart = async (req, res) => { //Flexible Route
 };
 
 exports.updateCartAndBooks = async (req, res) => {//Await only works if async, generally requires try and catch if async is used
-    const { bookTitle } = req.body;
+    const { title } = req.query;
+    var email = null;
     const token = req.headers['token'];
     jwt.verify(token, secret, (err, payload) => {
         if (err) {
@@ -60,7 +61,7 @@ exports.updateCartAndBooks = async (req, res) => {//Await only works if async, g
         email = payload.email; // Add the username to the request object
     });
     const user = await User.find({ email: email });
-    const book = await Post.find({ title: bookTitle });
+    const book = await Post.find({ title: title });
 
     user[0].cart.push(book[0]);
     book[0].number = book[0].number - 1; 
